@@ -35,7 +35,10 @@ export default function Login() {
       .single();
 
     if (profileError || !profile) {
-      alert("User profile not found.");
+      alert(profileError
+        ? `Could not load user profile: ${profileError.message}`
+        : "User profile not found. Check that public.users has a row with this email.");
+      await supabase.auth.signOut();
       setLoading(false);
       return;
     }
