@@ -3,13 +3,25 @@ import { supabase } from "../supabase";
 
 export default function useAuth() {
   const [user, setUser] = useState(null);
+  const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
 
     async function loadSession() {
       const { data: sessionData } = await supabase.auth.getSession();
-      setUser(sessionData.session?.user || null);
+      const currentUser = sessionData.session?.user || null;
+      setUser(currentUser);
+      if (currentUser?.email) {
+        const { data } = await supabase
+          .from("users")
+          .select("role, is_active")
+          .eq("email", currentUser.email)
+          .maybeSingle();
+        setProfile(data || null);
+      } else {
+        setProfile(null);
+      }
       setLoading(false);
     }
 
@@ -18,12 +30,18 @@ export default function useAuth() {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user || null);
+      const currentUser = session?.user || null;
+      setUser(currentUser);
+      if (!currentUser) setProfile(null);
+      else {
+        supabase.from("users").select("role, is_active").eq("email", currentUser.email).maybeSingle()
+          .then(({ data }) => setProfile(data || null));
+      }
     });
 
     return () => subscription.unsubscribe();
 
   }, []);
 
-  return { user, loading };
+  return { user, profile, loading };
 }

@@ -40,6 +40,13 @@ export default function Login() {
       return;
     }
 
+    if (profile.is_active === false) {
+      alert("This account is inactive. Please contact the campus administrator.");
+      await supabase.auth.signOut();
+      setLoading(false);
+      return;
+    }
+
     // Validate login based on active tab
     if (activeTab === "student" && profile.role !== "student") {
       alert("Please use the Admin/Faculty tab to login.");
@@ -62,7 +69,7 @@ export default function Login() {
 
     switch (profile.role) {
       case "admin":
-        window.location.href = "/staff";
+        window.location.href = "/admin";
         break;
       case "staff":
         window.location.href = "/staff";

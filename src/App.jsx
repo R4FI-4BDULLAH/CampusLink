@@ -10,6 +10,7 @@ import CreateCourseClass from "./pages/CreateCourseClass";
 import CourseClasses from "./pages/CourseClasses";
 import Advising from "./pages/Advising";
 import SystemConfig from "./pages/SystemConfig";
+import AdminDashboard from "./pages/AdminDashboard";
 
 
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -23,9 +24,18 @@ function App() {
         <Route path="/change-password" element={<ChangePassword />} />
 
         <Route
+          path="/admin"
+          element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
           path="/staff/add-faculty"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["staff"]}>
               <AddFaculty />
             </ProtectedRoute>
           }
@@ -34,7 +44,7 @@ function App() {
         <Route
           path="/staff/course-classes"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["staff"]}>
               <CourseClasses />
             </ProtectedRoute>
           }
@@ -43,7 +53,7 @@ function App() {
         <Route
           path="/student"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["student"]}>
               <StudentDashboard />
             </ProtectedRoute>
           }
@@ -52,7 +62,7 @@ function App() {
         <Route
           path="/student/advising"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["student"]}>
               <Advising />
             </ProtectedRoute>
           }
@@ -62,7 +72,7 @@ function App() {
         <Route
           path="/staff/create-class"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["staff"]}>
               <CreateCourseClass />
             </ProtectedRoute>
           }
@@ -71,7 +81,7 @@ function App() {
         <Route
           path="/staff/course-classes"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["staff"]}>
               <CourseClasses />
             </ProtectedRoute>
           }
@@ -81,7 +91,7 @@ function App() {
         <Route
           path="/faculty"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["faculty"]}>
               <FacultyDashboard />
             </ProtectedRoute>
           }
@@ -90,7 +100,7 @@ function App() {
         <Route
           path="/staff"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["staff"]}>
               <StaffDashboard />
             </ProtectedRoute>
           }
@@ -99,7 +109,7 @@ function App() {
         <Route
           path="/staff/add-student"
           element={
-          <ProtectedRoute>
+          <ProtectedRoute allowedRoles={["staff"]}>
               <AddStudent />
             </ProtectedRoute>
           }
@@ -108,7 +118,7 @@ function App() {
         <Route
           path="/staff/config"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["staff"]}>
               <SystemConfig />
             </ProtectedRoute>
           }
